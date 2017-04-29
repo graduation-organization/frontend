@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link href="assets/bootstrap/css/bootstrap-editable.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-table.min.css">
+    <script src="assets/js/jquery-1.11.1.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/bootstrap/js/tableExport.js"></script>
+    <script src="assets/bootstrap/table/bootstrap-table.js"></script>
+    <script src="assets/bootstrap/js/bootstrap-table-export.js"></script>
+    <script src="assets/bootstrap/table/extensions/editable/bootstrap-table-editable.js"></script>
+    <script src="assets/bootstrap/js/bootstrap-editable.js"></script>
+    <title>列表</title>
+    <style type="text/css"></style>
+    <script>
+        $(function () {
+
+            //1.初始化Table
+            var oTable = new TableInit();
+            oTable.Init();
+
+            //2.初始化Button的点击事件
+            var oButtonInit = new ButtonInit();
+            oButtonInit.Init();
+
+        });
+
+
+        var TableInit = function () {
+            var oTableInit = new Object();
+            //初始化Table
+            oTableInit.Init = function () {
+                $('#tb_users').bootstrapTable({
+                    url: 'http://localhost:8080/sysUser/all',         //请求后台的URL（*）
+                    method: 'get',                      //请求方式（*）
+                    toolbar: '#toolbar',                //工具按钮用哪个容器
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    sortable: false,                     //是否启用排序
+                    sortOrder: "asc",                   //排序方式
+                    queryParams: oTableInit.queryParams,//传递参数（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber:1,                       //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+                    search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                    strictSearch: true,
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: false,                  //是否显示刷新按钮
+                    minimumCountColumns: 2,             //最少允许的列数
+                    clickToSelect: true,                //是否启用点击选中行
+                    height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "Id",                     //每一行的唯一标识，一般为主键列
+                    showToggle:true,                    //是否显示详细视图和列表视图的切换按钮
+                    cardView: false,                    //是否显示详细视图
+                    detailView: true,                   //是否显示父子表
+                    columns: [{
+                        field: 'sysUserId',
+                        title: '编号'
+                    }, {
+                        field: 'sysUserName',
+                        title: '用户名'
+                    }, {
+                        field: 'sysUserPwd',
+                        title: '密码'
+                    }, {
+                        field: 'sysUserCreator',
+                        title: '创建者'
+                    }, {
+                        field: 'sysUserCreateTime',
+                        title: '注册时间'
+                    }, {
+                        field: 'sysUserLastLoginTime',
+                        title: '最近一次登录时间'
+                    }, {
+                        field: 'sysUserStatus',
+                        title: '状态'
+                    }, {
+                        field: 'sysUserUpdateUser',
+                        title: '用户修改者'
+                    }, {
+                        field: 'roleId',
+                        title: '角色ID'
+                    }, {
+                        field: 'sysUserUpdateTime',
+                        title: '更新时间'
+                    }, {
+                        field: 'operate',
+                        title: '操作',
+                        align: 'center',
+                        valign: 'middle',
+                        clickToSelect: false,
+                        formatter: operateFormatter,
+                        events: operateEvents
+                    } ]
+
+                });
+            };
+
+            //得到查询的参数
+            oTableInit.queryParams = function (params) {
+                var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                    limit: params.limit,   //页面大小
+                    offset: params.offset  //页码
+                };
+                return temp;
+            };
+            return oTableInit;
+        };
+
+
+        var ButtonInit = function () {
+            var oInit = new Object();
+            var postdata = {};
+
+            oInit.Init = function () {
+                //初始化页面上面的按钮事件
+                $("#btn-add")
+                    .click(function() {
+                        $("#add").modal("show");
+                    });
+
+                /*$("#btn-edit")
+                    .click(function() {
+                        var selectedRaido = $table.bootstrapTable('getSelections');
+                        if (selectedRaido.length === 0) {
+                            abp.notify.warn("请先选择要编辑的行！");
+                        } else {
+                            editTask(selectedRaido[0].Id);
+                        }
+                    });
+
+                $("#btn-delete")
+                    .click(function() {
+                        var selectedRaido = $table.bootstrapTable('getSelections');
+                        if (selectedRaido.length === 0) {
+                            abp.notify.warn("请先选择要删除的行！");
+                        } else {
+                            deleteTask(selectedRaido[0].Id);
+                        }
+                    });
+
+                /!*$("#btn-query")
+                    .click(function() {
+                        $table.bootstrapTable('refresh');
+                    });*!/
+                    */
+            };
+
+            return oInit;
+        };
+
+        //指定操作组
+        function operateFormatter(value, row, index) {
+            return [
+                ' <a class="detail" href="javascript:void(0)" title="Detail">',
+                '详情',
+                '</a>',
+                ' <a class="edit" href="javascript:void(0)" title="Edit" target="frame1">',
+                '修改',
+                '</a>',
+                ' <a class="remove" href="javascript:void(0)" title="Remove" target="frame1">',
+                '删除',
+                '</a>'
+            ].join('');
+        }
+
+        //指定table表体操作事件
+        window.operateEvents = {
+            'click .detail': function(e, value, row, index) {
+
+                localStorage.clear();
+                localStorage.setItem("sysUserId", eval('row').sysUserId);
+                console.log(localStorage.getItem("sysUserId"));
+//                console.log(value, row, index);
+                window.location.href = "sys_user_detail.html";
+
+
+            },
+            'click .edit': function(e, value, row, index) {
+                localStorage.clear();
+                localStorage.setItem("sysUserId", eval('row').sysUserId);
+                console.log(localStorage.getItem("sysUserId"));
+//                console.log(value, row, index);
+                window.location.href = "modify_sys_user.html";
+
+            },
+            'click .remove': function(e, value, row, index) {
+                console.log(value, row, index);
+//                console.log(eval('row').sysUserId);
+                if (confirm('您确认想要删除记录吗？')) {
+                    /*$.ajax({
+                        url: "/BlogConsole/Delete",
+                        type: "POST",
+                        data: { id: row.id },
+                        success: function (res) {
+                            if (res == "S") {
+                                alert("删除成功!");
+                                $table.bootstrapTable('refresh');
+                            }
+                        }
+                    });*/
+//                    alert("删除")
+                }
+            }
+        };
+
+        function setId() {
+
+        }
+    </script>
+</head>
+<body>
+<div class="panel-body" style="padding-bottom:0px;">
+    <!-- bootstrap-tablel指定的工具栏 -->
+    <div id="toolbar" class="btn-group">
+        <button id="btn-add" type="button" class="btn btn-primary">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+        </button>
+    </div>
+    <table id="tb_users"></table>
+</div>
+</body>
+
+</body>
+</html>

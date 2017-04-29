@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrapValidator.css"/>
+    <script src="assets/js/jquery-1.11.1.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <!--<script src="assets/bootstrap/js/bootstrapValidator.js"></script>-->
+    <title>高校教务管理信息系统</title>
+    <style type="text/css"></style>
+    <script>
+        localStorage.setItem("userId", "202131120");
+        var userId = localStorage.getItem("userId");
+        var db_password;
+
+        $(function () {
+            $("#username").val(userId);
+        });
+
+        function checkPwd() {
+            $.ajax({
+                type: "get",
+                url: "http://localhost:8080/student/" + userId + "/info",
+                dataType: "json",
+                success: function (result) {
+                    db_password = result.password;
+                    if ($("#oldpassword").val() != db_password) {
+                        alert("原密码错误");
+                    }
+                },
+                error: function () {
+                    alert("获取数据失败");
+                }
+            })
+
+        }
+        ;
+        function confirmSame() {
+            if ($("#newpassword").val() != $("#confirmpassword").val()) {
+                alert("两次密码不一致");
+            }
+        }
+        function modifyPwd() {
+            var data = JSON.stringify({
+                id: userId,
+                password: $("#newpassword").val()
+            });
+            $.ajax({
+                type: "put",
+                url: "http://localhost:8080/student/password",
+                data: data,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                    alert("修改成功");
+                },
+                error: function () {
+//                    alert("修改失败");
+                }
+            })
+        }
+        ;
+    </script>
+</head>
+<body>
+<div class="panle panel-success">
+    <div class="panel-heading">
+        <a class="panel-title">个人信息</a>
+    </div>
+
+    <div class="container-fluid">
+        <div>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-md-1 control-label"></label>
+                </div>
+                <div class="form-group">
+                    <!-- for与input中的id保持一致，可以使得在点击label时，也可以获取焦点。 -->
+                    <label class="col-md-6 control-label" for="username">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</label>
+                    <div class="col-md-2">
+                        <input type="text" id="username" class="form-control" value="" readonly/>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-md-6 control-label" for="oldpassword">输&nbsp;&nbsp;入&nbsp;&nbsp;原&nbsp;&nbsp;密&nbsp;&nbsp;码：</label>
+                    <div class="col-md-2">
+                        <input type="text" id="oldpassword" placeholder="输入原密码" class="form-control"
+                               value="" onblur="checkPwd()"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-6 control-label"
+                           for="newpassword">请&nbsp;输&nbsp;入&nbsp;新&nbsp;密&nbsp;码：</label>
+                    <div class="col-md-2">
+                        <input type="text" id="newpassword" placeholder="请输入新密码" class="form-control"
+                               value=""/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-6 control-label" for="confirmpassword">确&nbsp;&nbsp;认&nbsp;&nbsp;新&nbsp;&nbsp;密&nbsp;&nbsp;码：</label>
+                    <div class="col-md-2">
+                        <input type="text" id="confirmpassword" placeholder="确认新密码" class="form-control"
+                               value="" onblur="confirmSame()"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-1 control-label"></label>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-1 control-label"></label>
+                </div>
+                <div class="form-actions text-center">
+                    <button id="submit" type="submit" class="btn btn-success" onclick="modifyPwd()">确&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

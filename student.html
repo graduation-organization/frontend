@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link href="assets/bootstrap/css/bootstrap-editable.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-table.min.css">
+    <title>高校教务管理信息系统</title>
+    <style type="text/css"></style>
+    <script>
+
+    </script>
+</head>
+<body>
+<!-- 导航栏部分 -->
+<div class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <div class="navbar-brand">
+            </div>
+        </div>
+        <ul class="nav navbar-nav nav-stacked navbar-right">
+            <li>
+                <a href="#" data-toggle="dropdown">
+                    <img class="img-circle" src="images/pdm.png" width="30" height="30"/>
+                    <small>Welcome</small>
+                    张田田
+                    <span class="caret"></span>
+                </a>
+                <ul class="nav nav-pills nav-stacked dropdown-menu">
+                    <li>
+                        <a href="index.html">
+                            <span class="glyphicon glyphicon-off"></span>Logout
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- 页面部分 -->
+<div class="row">
+    <div class="col-sm-2">
+        <div class="panel-group" id="box">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <a href="#collapseA" data-parent="#box" data-toggle="collapse" class="panel-title">信息维护</a>
+                </div>
+                <div class="panel-collapse collapse in" id="collapseA">
+                    <div class="panel-body">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li><a href="personal_info.html" target="frame1">个人信息</a></li>
+                            <li><a href="modify_pwd.html" target="frame1">密码修改</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <a href="#collapseB" data-parent="#box" data-toggle="collapse" class="panel-title">信息查询</a>
+                </div>
+                <div class="panel-collapse collapse" id="collapseB">
+                    <div class="panel-body">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li><a href="test2.html" target="frame1">班级课表查询</a></li>
+                            <li><a href="test2.html" target="frame1">学生个人课表</a></li>
+                            <li><a href="test2.html" target="frame1">学生考试查询</a></li>
+                            <li><a href="test2.html" target="frame1">平时成绩查询</a></li>
+                            <li><a href="test2.html" target="frame1">学生选课情况查询</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <a href="#collapseC" data-parent="#box" data-toggle="collapse" class="panel-title">教学质量评价</a>
+                </div>
+                <div class="panel-collapse collapse" id="collapseC">
+                    <div class="panel-body">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li><a href="test2.html" target="frame1">教学质量评价</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-10" id="content">
+        <iframe name="frame1" scrolling="no" src="personal_info.html" allowfullscreen="no" width="1000" height="500" frameborder="0"></iframe>
+    </div>
+</div>
+<script src="assets/js/jquery-1.11.1.min.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/basic.js"></script>
+<script src="js/router.js"></script>
+<script src="assets/bootstrap/js/tableExport.js"></script>
+<script src="assets/bootstrap/table/bootstrap-table.js"></script>
+<script src="assets/bootstrap/js/bootstrap-table-export.js"></script>
+<script src="assets/bootstrap/table/extensions/editable/bootstrap-table-editable.js"></script>
+<script src="assets/bootstrap/js/bootstrap-editable.js"></script>
+</body>
+</html>
